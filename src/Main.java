@@ -2,14 +2,26 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 
 import ui.MainFrame;
+import ui.Screens.SplashScreen;
 
-
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 
 public class Main {
     public static void main(String[] args) {
 
-    new MainFrame();
+
+        //Splash Screen Show and Hide
+        SplashScreen splashScreen = new SplashScreen(1);
+        splashScreen.ShowSplash();
+        splashScreen.SplashScreenExit();
+
+        //Main Frame
+        SwingUtilities.invokeLater(() -> {
+        new MainFrame();
+        });
+
 
 
     }

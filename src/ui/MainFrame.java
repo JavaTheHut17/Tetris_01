@@ -1,6 +1,8 @@
 package ui;
 
 
+import ui.Screens.SplashScreen;
+
 import javax.tools.Tool;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -22,13 +24,13 @@ public class MainFrame extends Frame {
 
     }
     //Center Window
-    private void centerWindow() {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screenSize.width - getWidth()) / 2;
-        int y = (screenSize.height - getHeight()) / 2;
-        setLocation(x, y);
-    }
+//    private void centerWindow() {
+//        Toolkit toolkit = Toolkit.getDefaultToolkit();
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        int x = (screenSize.width - getWidth()) / 2;
+//        int y = (screenSize.height - getHeight()) / 2;
+//        setLocation(x, y);
+//    }
 
 
 }
