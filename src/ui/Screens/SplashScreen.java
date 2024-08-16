@@ -1,6 +1,8 @@
 package ui.Screens;
 
 
+import ui.MainFrame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -39,7 +41,7 @@ public class SplashScreen extends JWindow {
             @Override
             public void actionPerformed(ActionEvent e) {
               setVisible(false);
-
+              new MainFrame();
             }
         });
         timer.setRepeats(false); // Ensure the timer runs only once

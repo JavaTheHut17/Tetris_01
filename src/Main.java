@@ -17,10 +17,6 @@ public class Main {
         splashScreen.ShowSplash();
         splashScreen.SplashScreenExit();
 
-        //Main Frame
-        SwingUtilities.invokeLater(() -> {
-        new MainFrame();
-        });
 
 
 
