@@ -1,5 +1,7 @@
 package ui.Screens;
 
+import ui.MainFrame;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,7 +14,12 @@ public class ConfigureScreen extends   JPanel {
 
         setBackground(Color.BLUE);
 
-
+        //Back Button
+        JButton backButton = new JButton("Back");
+        add(backButton);
+        backButton.addActionListener(e ->{
+            MainFrame.bButtonFunc();
+        });
 
 
 

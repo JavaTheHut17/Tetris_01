@@ -9,9 +9,9 @@ import java.awt.event.ActionListener;
 
 public class TitleScreen extends JPanel {
 
+//        MainFrame mainFrame = new MainFrame();
 
     public TitleScreen() {
-
 
         //Config
 //        JPanel panel = new JPanel();
@@ -32,7 +32,7 @@ public class TitleScreen extends JPanel {
             JButton playButton = new JButton("Play");
             add(playButton);
             playButton.addActionListener(e ->{
-                new GameScreen();
+            MainFrame.playButtonNavFunc();
             });
 
 
@@ -40,15 +40,16 @@ public class TitleScreen extends JPanel {
         JButton configButton = new JButton("Config");
         add(configButton);
         configButton.addActionListener(e ->{
-            new ConfigureScreen();
+            MainFrame.ConfigNavFunc();
         });
 
         //High Score Button
         JButton highScoreButton = new JButton("High Score");
         add(highScoreButton);
         highScoreButton.addActionListener(e -> {
-            new HighScoreScreen();
+            MainFrame.hScoreNavFunc();
         });
+
 
         //Exit Button
         JButton exitButton = new JButton("Exit");

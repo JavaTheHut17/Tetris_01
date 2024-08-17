@@ -1,5 +1,7 @@
 package ui.Screens;
 
+import ui.MainFrame;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,7 +15,12 @@ public class GameScreen extends JPanel {
         setSize(600,900);
         setBackground(Color.GREEN);
 
-
+        //Back Button
+        JButton backButton = new JButton("Back");
+        add(backButton);
+        backButton.addActionListener(e ->{
+            MainFrame.bButtonFunc();
+        });
 
     }
 
