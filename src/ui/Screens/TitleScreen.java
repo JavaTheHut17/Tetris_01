@@ -32,7 +32,7 @@ public class TitleScreen extends JPanel {
             JButton playButton = new JButton("Play");
             add(playButton);
             playButton.addActionListener(e ->{
-            MainFrame.playButtonNavFunc();
+            NavigationEngine.playButtonNavFunc();
             });
 
 
@@ -40,14 +40,14 @@ public class TitleScreen extends JPanel {
         JButton configButton = new JButton("Config");
         add(configButton);
         configButton.addActionListener(e ->{
-            MainFrame.ConfigNavFunc();
+            NavigationEngine.ConfigNavFunc();
         });
 
         //High Score Button
         JButton highScoreButton = new JButton("High Score");
         add(highScoreButton);
         highScoreButton.addActionListener(e -> {
-            MainFrame.hScoreNavFunc();
+            NavigationEngine.hScoreNavFunc();
         });
 
 

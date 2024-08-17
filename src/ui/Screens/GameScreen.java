@@ -19,7 +19,7 @@ public class GameScreen extends JPanel {
         JButton backButton = new JButton("Back");
         add(backButton);
         backButton.addActionListener(e ->{
-            MainFrame.bButtonFunc();
+            NavigationEngine.bButtonFunc();
         });
 
     }

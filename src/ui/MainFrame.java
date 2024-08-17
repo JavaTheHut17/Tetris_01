@@ -1,10 +1,6 @@
 package ui;
 
-
-import ui.Screens.ConfigureScreen;
-import ui.Screens.GameScreen;
-import ui.Screens.HighScoreScreen;
-import ui.Screens.TitleScreen;
+import ui.Screens.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,18 +9,13 @@ import java.awt.event.WindowEvent;
 
 public class MainFrame extends JFrame {
 
-    private static CardLayout cardLayout;
-    private static JPanel cardPanel;
-
     public MainFrame() {
-        cardLayout = new CardLayout();
-        cardPanel = new JPanel(cardLayout);
 
-        TitleScreen titleScreen = new TitleScreen();
-        cardPanel.add(titleScreen, "TitleScreen");
-        cardPanel.add(new GameScreen(), "GameScreen");
-        cardPanel.add(new ConfigureScreen(), "ConfigureScreen");
-        cardPanel.add(new HighScoreScreen(), "HighScoreScreen");
+        new NavigationEngine();
+        add(NavigationEngine.cardPanel);
+        NavigationEngine.init();
+
+
 
         //Title
         setTitle("Tetris");
@@ -33,11 +24,7 @@ public class MainFrame extends JFrame {
         //Conditions
         setVisible(true);
         centerWindow();
-//        TitleScreen titleScreen = new TitleScreen();
-//        add(titleScreen);
-        add(cardPanel);
-        cardLayout.show(cardPanel, "TitleScreen");
-//        cardLayout.show(cardPanel, "GameScreen");
+
 
 
         //Close Button
@@ -50,22 +37,8 @@ public class MainFrame extends JFrame {
         });
 
     }
-//Play Button Nav Func
-public static void playButtonNavFunc(){
-        cardLayout.show(cardPanel, "GameScreen");
-}
-//Config Button Nav Func
-public static void ConfigNavFunc() {
-        cardLayout.show(cardPanel, "ConfigureScreen");
-}
-//High Score Nav Func
-    public static void hScoreNavFunc() {
-        cardLayout.show(cardPanel, "HighScoreScreen");
-    }
-//Back Button Nav Func
-    public static void bButtonFunc(){
-        cardLayout.show(cardPanel, "TitleScreen");
-    }
+
+
 
    // Center Window
     private void centerWindow() {
