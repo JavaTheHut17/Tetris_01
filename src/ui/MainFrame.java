@@ -1,24 +1,32 @@
 package ui;
 
 
-import ui.Screens.SplashScreen;
+import ui.Screens.GameScreen;
 import ui.Screens.TitleScreen;
 
-import javax.tools.Tool;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class MainFrame extends Frame {
+public class MainFrame extends JFrame {
+
+
 
     public MainFrame() {
 
+        //Title
         setTitle("Tetris");
+        //Size
         setSize(new Dimension(600, 900));
+        //Conditions
         setVisible(true);
         centerWindow();
         TitleScreen titleScreen = new TitleScreen();
         add(titleScreen);
+
+
+        //Close Button
         addWindowListener(new WindowAdapter() {
 
             @Override
@@ -28,6 +36,9 @@ public class MainFrame extends Frame {
         });
 
     }
+
+
+
    // Center Window
     private void centerWindow() {
         Toolkit toolkit = Toolkit.getDefaultToolkit();

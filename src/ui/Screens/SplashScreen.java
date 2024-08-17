@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 
 public class SplashScreen extends JWindow {
 
+
+
     public int time;
 
     public SplashScreen(int time) {

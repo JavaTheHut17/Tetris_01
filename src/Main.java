@@ -1,11 +1,7 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 
-import ui.MainFrame;
 import ui.Screens.SplashScreen;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 
 public class Main {
