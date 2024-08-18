@@ -10,8 +10,6 @@ import java.awt.event.ActionListener;
 
 public class SplashScreen extends JWindow {
 
-
-
     public int time;
 
     public SplashScreen(int time) {
@@ -20,6 +18,7 @@ public class SplashScreen extends JWindow {
 
     }
 
+    //Splash Screen
     public void ShowSplash() {
         JPanel content = new JPanel();
         int width = 400;
@@ -36,7 +35,7 @@ public class SplashScreen extends JWindow {
     }
 
 
-
+//Splash Screen Function
     public void SplashScreenExit(){
 
         Timer timer = new Timer(time * 4000, new ActionListener() {

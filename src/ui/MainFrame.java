@@ -1,6 +1,6 @@
 package ui;
 
-import ui.Screens.*;
+import gameModel.Engine.NavigationEngine;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +11,10 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
 
+        //Navigation
         new NavigationEngine();
         add(NavigationEngine.cardPanel);
         NavigationEngine.init();
-
-
 
         //Title
         setTitle("Tetris");
@@ -37,8 +36,6 @@ public class MainFrame extends JFrame {
         });
 
     }
-
-
 
    // Center Window
     private void centerWindow() {

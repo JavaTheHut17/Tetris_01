@@ -1,6 +1,6 @@
 package ui.Screens;
 
-import ui.MainFrame;
+import gameModel.Engine.NavigationEngine;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,11 +9,14 @@ public class GameScreen extends JPanel {
 
     public GameScreen() {
 
-        System.out.println("GameScreen Initiated");
+        //Config
         setVisible(true);
-        setLayout(new FlowLayout());
         setSize(600,900);
         setBackground(Color.GREEN);
+
+        //Layout Config
+        setLayout(new FlowLayout());
+
 
         //Back Button
         JButton backButton = new JButton("Back");
@@ -21,6 +24,9 @@ public class GameScreen extends JPanel {
         backButton.addActionListener(e ->{
             NavigationEngine.bButtonFunc();
         });
+
+
+
 
     }
 

@@ -1,20 +1,15 @@
 package ui.Screens;
 
-import ui.MainFrame;
+import gameModel.Engine.NavigationEngine;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class TitleScreen extends JPanel {
-
-//        MainFrame mainFrame = new MainFrame();
 
     public TitleScreen() {
 
         //Config
-//        JPanel panel = new JPanel();
         setVisible(true);
 
         //Layout
