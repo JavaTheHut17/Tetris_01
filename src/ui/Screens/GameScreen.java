@@ -12,7 +12,7 @@ public class GameScreen extends JPanel {
         //Config
         setVisible(true);
         setSize(600,900);
-        setBackground(Color.GREEN);
+        setBackground(Color.LIGHT_GRAY);
 
         //Layout Config
         setLayout(new FlowLayout());

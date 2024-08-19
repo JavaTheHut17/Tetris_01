@@ -15,7 +15,7 @@ public class ConfigureScreen extends   JPanel {
 
         //Layout Config
         GridBagConstraints gbc = new GridBagConstraints();
-        setBackground(Color.BLUE);
+        setBackground(Color.LIGHT_GRAY);
 
         //Title
         JLabel configTitle = new JLabel("Configuration: ");
@@ -24,7 +24,6 @@ public class ConfigureScreen extends   JPanel {
         gbc.gridwidth = 2;
         gbc.gridheight = 1;
         gbc.fill = GridBagConstraints.BOTH;
-//        gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(10, 10, 10, 10);
         configTitle.setFont(new Font("Arial", Font.BOLD, 24));
         add(configTitle, gbc);
@@ -233,9 +232,93 @@ public class ConfigureScreen extends   JPanel {
         add(SoundEffectsToggleValue, gbc);
 
 
+
+        //AI Play Toggle Label
+        JLabel AIPlayToggleLabel = new JLabel("AI Play (On/Off): ");
+        gbc.gridy = 6;
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        add(AIPlayToggleLabel, gbc);
+
+        //AI Play Check Box
+        JCheckBox AIPlayCheckBox = new JCheckBox();
+        AIPlayCheckBox.setSelected(false);
+        gbc.gridx = 1;
+        gbc.gridy = 6;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        add(AIPlayCheckBox, gbc);
+
+        //AI Play Check Box Value Text
+        JLabel AIPlayToggleValue = new JLabel("Off");
+        gbc.gridx = 4;
+        gbc.gridy = 6;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        AIPlayCheckBox.addChangeListener(e ->{
+            Boolean AIPlayCheckBoxValue = AIPlayCheckBox.isSelected();
+            if(AIPlayCheckBoxValue){
+                AIPlayToggleValue.setText("On");
+            }
+            else{
+                AIPlayToggleValue.setText("Off");
+            }
+        });
+        add(AIPlayToggleValue, gbc);
+
+
+
+        //Extended Mode Toggle Label
+        JLabel ExtendedModeToggleLabel = new JLabel("Extended Mode (On/Off): ");
+        gbc.gridy = 7;
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        add(ExtendedModeToggleLabel, gbc);
+
+        //Extended ModeCheck Box
+        JCheckBox ExtendedModeCheckBox = new JCheckBox();
+        ExtendedModeCheckBox.setSelected(false);
+        gbc.gridx = 1;
+        gbc.gridy = 7;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        add(ExtendedModeCheckBox, gbc);
+
+        //AI Play Check Box Value Text
+        JLabel ExtendedModeToggleValue = new JLabel("Off");
+        gbc.gridx = 4;
+        gbc.gridy = 7;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        ExtendedModeCheckBox.addChangeListener(e ->{
+            Boolean ExtendedModeCheckBoxValue = ExtendedModeCheckBox.isSelected();
+            if(ExtendedModeCheckBoxValue){
+                ExtendedModeToggleValue.setText("On");
+            }
+            else{
+                ExtendedModeToggleValue.setText("Off");
+            }
+        });
+        add(ExtendedModeToggleValue, gbc);
+
+
         //Back Button
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 8;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 5;
         gbc.gridheight = 1;

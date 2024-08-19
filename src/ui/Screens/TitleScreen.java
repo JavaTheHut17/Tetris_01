@@ -16,7 +16,7 @@ public class TitleScreen extends JPanel {
         setLayout(new GridLayout(7, 1));
 
         //Background Colour
-        setBackground(Color.GRAY);
+        setBackground(Color.LIGHT_GRAY);
 
         //Title
         JLabel textLabel = new JLabel("Welcome To Tetris", JLabel.CENTER);
