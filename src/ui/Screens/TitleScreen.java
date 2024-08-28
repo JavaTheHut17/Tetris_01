@@ -27,6 +27,7 @@ public class TitleScreen extends JPanel {
             JButton playButton = new JButton("Play");
             add(playButton);
             playButton.addActionListener(e ->{
+
             NavigationEngine.playButtonNavFunc();
             });
 
