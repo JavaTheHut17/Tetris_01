@@ -1,6 +1,7 @@
 package ui;
 
 import gameModel.Engine.NavigationEngine;
+import ui.Screens.SplashScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class MainFrame extends JFrame {
+
+
 
     public MainFrame() {
 

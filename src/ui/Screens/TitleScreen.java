@@ -2,12 +2,19 @@ package ui.Screens;
 
 import gameModel.Engine.NavigationEngine;
 
+import javax.sound.midi.Sequencer;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.TimerTask;
+import javax.swing.Timer;
 
 public class TitleScreen extends JPanel {
 
     public TitleScreen() {
+
+
 
         //Config
         setVisible(true);

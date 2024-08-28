@@ -1,7 +1,5 @@
 package ui.Screens;
-
 import gameModel.Engine.NavigationEngine;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,36 +15,34 @@ public class GameScreen extends JPanel implements ActionListener{
     private int gridHeight=700;
     public Boolean isPaused = false;
     private int[] linePiece = {1,1,1,1};
-    private int linePiecex = 4;
+
     private int cellWidth =25;
     private int cellHeight = 25;
     private int[][] grid;
     private final int rows = 28;
     private final int cols = 16;
     private int yCords = 0;
+    private int[] currentPiece;
+    private int currentPieceLength;
+    private int newPiecePosX;
+    private int newPiecePosY;
+    private int newPiecePosLength;
+    private int bottomGrid =675;
+    private Boolean piecePlaced = false;
 
 
     public GameScreen() {
         timer = new Timer(10, this);
-        timer.restart();
-        repaint();
-        revalidate();
+
+        grid = new int[rows][cols];
+        currentPiece = linePiece;
+        currentPieceLength = currentPiece.length;
         timer.start();
         setFocusable(true);
         SwingUtilities.invokeLater(this::requestFocusInWindow);
         setPreferredSize(new Dimension(400, 600));
         setBackground(Color.BLACK);
-       setLayout(new FlowLayout());
-
-        //Fill Grid
-
-        grid = new int[rows][cols];
-
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                grid[i][j] = 0;
-            }
-        }
+        setLayout(new FlowLayout());
 
         //Pause Text Box
         JPanel pausePanel = new JPanel();
@@ -58,15 +54,12 @@ public class GameScreen extends JPanel implements ActionListener{
         add(pausePanel);
         pausePanel.setVisible(false);
 
-
-
         InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
         inputMap.put(KeyStroke.getKeyStroke("P"),"Pause");
         inputMap.put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
         inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
         inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
-
 
         actionMap.put("Pause", new AbstractAction() {
             @Override
@@ -133,12 +126,8 @@ public class GameScreen extends JPanel implements ActionListener{
                 pausePanel.setVisible(false);
                 timer.start();
             }
-
         });
-
     }
-
-
 
     //Paint Grid & Pieces
     @Override
@@ -146,19 +135,12 @@ public class GameScreen extends JPanel implements ActionListener{
     super.paint(g);
     DrawGrid(g);
     Piece(g);
-
-    printGrid();
-
+//    PiecePlacement(g);
+    if(piecePlaced){
+//        super.paint(g);
+        PiecePlacement(g);
+//        piecePlaced = false;
     }
-
-
-    public void printGrid() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                System.out.print(grid[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 
     public void restartGame() {
@@ -173,16 +155,49 @@ public class GameScreen extends JPanel implements ActionListener{
 
     public void Piece (Graphics g){
         g.setColor(Color.GREEN);
-        for(int i =0;i<linePiece.length;i++){
-            if(linePiece[i] == 1){
-                g.fillRect(x + (linePiecex + i) * 25,yCords = 100 + y, 25, 25);
+        for(int i =0;i<currentPiece.length;i++){
+            if(currentPiece[i] == 1){
+                g.fillRect(x + (currentPieceLength + i) * 25,yCords = 100 + y, 25, 25);
             }
         }
-
-
-
     }
 
+    public void PiecePlacement(Graphics g){
+        g.setColor(Color.GREEN);
+        for(int i =0;i<currentPiece.length;i++){
+            for(int j=0;j<currentPiece.length;j++){
+                g.fillRect(100 + newPiecePosX + i * 25 ,100 + newPiecePosY ,cellWidth,cellHeight);
+            }
+
+        }
+        updateGrid();
+        lockPiece(g);
+    }
+
+    public void updateGrid(){
+        for (int i = 0; i < currentPiece.length; i++) {
+            if (currentPiece[i] == 1) {
+                int gridX = newPiecePosX / cellWidth;
+                int gridY = newPiecePosY / cellHeight;
+
+                if (gridX + i < cols && gridY < rows) {
+                    grid[gridY][gridX + i] = 1;  // Mark the grid cell as filled
+                }
+            }
+        }
+    }
+
+    public void lockPiece(Graphics g){
+        g.setColor(Color.BLUE);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (grid[i][j] == 1) {
+                    g.fillRect(100 + j * cellWidth, 100 + i * cellHeight, cellWidth, cellHeight);
+
+                }
+            }
+        }
+    }
 
 
     public void DrawGrid(Graphics g){
@@ -198,15 +213,19 @@ public class GameScreen extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
 
         y +=1;
-        if (y >= 675){
-            y=675;
+        if (y >= bottomGrid){
+
+//            newPiecePosLength = x + (currentPieceLength * cellWidth);
+            newPiecePosX = x;
+            newPiecePosY = y ;
+            bottomGrid = y - 25;
+            piecePlaced = true;
+//            System.out.println("new Piece x" + newPiecePosX);
+//            System.out.println("New piece y " + newPiecePosY);
+            y = 100;
+
 
         }
         repaint();
     }
-
-
-
-
-
 }

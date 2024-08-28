@@ -47,6 +47,7 @@ public class SplashScreen extends JWindow {
         });
         timer.setRepeats(false); // Ensure the timer runs only once
         timer.start(); // Start the timer
+
     }
 
 
