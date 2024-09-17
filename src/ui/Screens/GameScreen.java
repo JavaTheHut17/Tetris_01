@@ -4,11 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import gameModel.Engine.globalState;
 public class GameScreen extends JPanel implements ActionListener{
 
     private int x = 100;
     private int y =0;
-    private Timer timer;
+    public Timer timer;
     private int xgrid =0;
     private int ygrid = 0;
     private int gridWidth =400;
@@ -32,12 +33,18 @@ public class GameScreen extends JPanel implements ActionListener{
 
 
     public GameScreen() {
+        System.out.println("gameScreen loaded");
         timer = new Timer(10, this);
 
         grid = new int[rows][cols];
         currentPiece = linePiece;
         currentPieceLength = currentPiece.length;
-        timer.start();
+
+        if(globalState.getInstance().currentGameState){
+            System.out.println("GS called.");
+            timer.start();
+        }
+
         setFocusable(true);
         SwingUtilities.invokeLater(this::requestFocusInWindow);
         setPreferredSize(new Dimension(400, 600));

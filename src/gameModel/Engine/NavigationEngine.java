@@ -20,7 +20,7 @@ public class NavigationEngine extends JPanel {
 
         //Screens
         cardPanel.add(new TitleScreen(), "TitleScreen");
-        cardPanel.add(new GameScreen(), "GameScreen");
+//        cardPanel.add(new GameScreen(), "GameScreen");
         cardPanel.add(new ConfigureScreen(), "ConfigureScreen");
         cardPanel.add(new HighScoreScreen(), "HighScoreScreen");
     }
@@ -28,7 +28,9 @@ public class NavigationEngine extends JPanel {
 
     //Play Button Nav Func
     public static void playButtonNavFunc(){
+        cardPanel.add(new GameScreen(), "GameScreen");
         cardLayout.show(cardPanel, "GameScreen");
+
     }
     //Config Button Nav Func
     public static void ConfigNavFunc() {

@@ -1,16 +1,16 @@
 package ui.Screens;
 
-
+import gameModel.Engine.GameTime;
 import ui.MainFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 
 public class SplashScreen extends JWindow {
 
     public int time;
+
 
     public SplashScreen(int time) {
 
@@ -32,31 +32,30 @@ public class SplashScreen extends JWindow {
         add(content);
         setVisible(true);
 
+
     }
 
 
 //Splash Screen Function
-    public void SplashScreenExit(){
+    public void SplashScreenExit() throws InterruptedException {
 
-        Timer timer = new Timer(time * 4000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-              setVisible(false);
-              new MainFrame();
+        GameTime gameTimer = GameTime.getInstance();
+        gameTimer.gameDuration();
+
+        while(true){
+
+            if(gameTimer.gameDuration() >= 4){
+
+                setVisible(false);
+                new MainFrame();
+                break;
             }
-        });
-        timer.setRepeats(false); // Ensure the timer runs only once
-        timer.start(); // Start the timer
+            Thread.sleep(500);
+        }
 
     }
 
 
-
-
-
-
 }
-
-
 
 

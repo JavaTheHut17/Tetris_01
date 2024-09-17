@@ -1,6 +1,7 @@
 package ui.Screens;
 
 import gameModel.Engine.NavigationEngine;
+import gameModel.Engine.globalState;
 
 import javax.sound.midi.Sequencer;
 import javax.swing.*;
@@ -9,8 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.TimerTask;
 import javax.swing.Timer;
+import ui.Screens.GameScreen;
 
 public class TitleScreen extends JPanel {
+
+    private static CardLayout cardLayout;
+    public static JPanel cardPanel;
+
 
     public TitleScreen() {
 
@@ -30,12 +36,17 @@ public class TitleScreen extends JPanel {
         textLabel.setFont(new Font("Arial", Font.BOLD, 24));
         add(textLabel);
 
+
+
         //Play Button
             JButton playButton = new JButton("Play");
             add(playButton);
             playButton.addActionListener(e ->{
 
+            globalState.getInstance().currentGameState = true;
+            System.out.println("title screen : " + globalState.getInstance().currentGameState);
             NavigationEngine.playButtonNavFunc();
+
             });
 
 
@@ -66,8 +77,6 @@ public class TitleScreen extends JPanel {
 
 
     }
-
-
 
 
 
