@@ -10,7 +10,8 @@ import java.awt.event.WindowEvent;
 
 public class MainFrame extends JFrame {
 
-
+    public int screenWidth = 600;
+    public int screenHeight = 900;
 
     public MainFrame() {
 
@@ -22,7 +23,7 @@ public class MainFrame extends JFrame {
         //Title
         setTitle("Tetris");
         //Size
-        setSize(new Dimension(600, 900));
+        setSize(new Dimension(screenWidth, screenHeight));
         //Conditions
         setVisible(true);
         centerWindow();

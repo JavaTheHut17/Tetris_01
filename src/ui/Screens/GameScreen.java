@@ -3,45 +3,50 @@ import gameModel.Engine.NavigationEngine;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import gameModel.Engine.globalState;
+
+
 public class GameScreen extends JPanel implements ActionListener{
 
-    private int x = 100;
-    private int y =0;
     public Timer timer;
-    private int xgrid =0;
-    private int ygrid = 0;
-    private int gridWidth =400;
-    private int gridHeight=700;
     public Boolean isPaused = false;
     private int[] linePiece = {1,1,1,1};
-
     private int cellWidth =25;
     private int cellHeight = 25;
     private int[][] grid;
-    private final int rows = 28;
-    private final int cols = 16;
-    private int yCords = 0;
+    private final int rows = 15;
+    private final int cols = 5;
     private int[] currentPiece;
     private int currentPieceLength;
     private int newPiecePosX;
     private int newPiecePosY;
-    private int newPiecePosLength;
-    private int bottomGrid =675;
     private Boolean piecePlaced = false;
+
+    //Screen Sizing (fix this )
+//    Toolkit toolkit = Toolkit.getDefaultToolkit();
+//    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//    private int screenWidth = (screenSize.width - getWidth()) / 2;
+//    private int screenHeight = (screenSize.height - getHeight()) / 2;
+    private int screenWidth = 600;
+    private int screenHeight = 900;
+    private int StartGridX = (screenWidth - (cols * cellWidth))/2;
+    private int StartGridY = (screenHeight - (rows * cellHeight))/2;
+    private int x;
+    private int y;
+
 
 
     public GameScreen() {
         System.out.println("gameScreen loaded");
         timer = new Timer(10, this);
-
+        x = StartGridX;
+        y = StartGridY -25;
         grid = new int[rows][cols];
         currentPiece = linePiece;
         currentPieceLength = currentPiece.length;
 
+        //Game Timer Start
         if(globalState.getInstance().currentGameState){
-            System.out.println("GS called.");
             timer.start();
         }
 
@@ -87,8 +92,9 @@ public class GameScreen extends JPanel implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(!isPaused){
-                    x -= 25;
-                    if (x < 0) x = 300;
+                    x-= 25;
+                    if (x < StartGridX)
+                        x = StartGridX + (cols - currentPiece.length) * cellWidth;
                     repaint();
                 }
                 }
@@ -99,7 +105,9 @@ public class GameScreen extends JPanel implements ActionListener{
             public void actionPerformed(ActionEvent e) {
                 if(!isPaused){
                     x += 25;
-                    if (x > 300) x = 0;
+                    if(x > StartGridX + (cols - currentPiece.length) * cellWidth){
+                        x = StartGridX;
+                    }
                     repaint();
                 }
                 }
@@ -160,21 +168,20 @@ public class GameScreen extends JPanel implements ActionListener{
     }
 
 
-    public void Piece (Graphics g){
+    public void Piece(Graphics g) {
         g.setColor(Color.GREEN);
-        for(int i =0;i<currentPiece.length;i++){
-            if(currentPiece[i] == 1){
-                g.fillRect(x + (currentPieceLength + i) * 25,yCords = 100 + y, 25, 25);
+        for (int i = 0; i < currentPiece.length; i++) {
+            if (currentPiece[i] == 1) {
+                g.fillRect(x + i * 25, y, 25, 25);
             }
         }
     }
 
     public void PiecePlacement(Graphics g){
-        g.setColor(Color.GREEN);
+        g.setColor(Color.PINK);
         for(int i =0;i<currentPiece.length;i++){
-            for(int j=0;j<currentPiece.length;j++){
-                g.fillRect(100 + newPiecePosX + i * 25 ,100 + newPiecePosY ,cellWidth,cellHeight);
-            }
+                g.fillRect(newPiecePosX + i * cellWidth, newPiecePosY, cellWidth,cellHeight);
+
 
         }
         updateGrid();
@@ -182,10 +189,11 @@ public class GameScreen extends JPanel implements ActionListener{
     }
 
     public void updateGrid(){
+        int gridX = newPiecePosX / cellWidth;
+        int gridY = newPiecePosY / cellHeight;
+
         for (int i = 0; i < currentPiece.length; i++) {
             if (currentPiece[i] == 1) {
-                int gridX = newPiecePosX / cellWidth;
-                int gridY = newPiecePosY / cellHeight;
 
                 if (gridX + i < cols && gridY < rows) {
                     grid[gridY][gridX + i] = 1;  // Mark the grid cell as filled
@@ -199,7 +207,7 @@ public class GameScreen extends JPanel implements ActionListener{
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (grid[i][j] == 1) {
-                    g.fillRect(100 + j * cellWidth, 100 + i * cellHeight, cellWidth, cellHeight);
+                    g.fillRect(StartGridX + j * cellWidth, StartGridY + i * cellWidth, cellWidth,cellHeight);
 
                 }
             }
@@ -211,7 +219,7 @@ public class GameScreen extends JPanel implements ActionListener{
         g.setColor(Color.LIGHT_GRAY);
         for(int i=0;i<rows;i++){
             for(int j=0;j<cols;j++){
-                g.fillRect(100 + j * cellWidth, 100 + i * cellWidth, cellWidth,cellHeight);
+                g.fillRect(StartGridX + j * cellWidth, StartGridY + i * cellWidth, cellWidth,cellHeight);
                 }
             }
         }
@@ -220,16 +228,20 @@ public class GameScreen extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
 
         y +=1;
-        if (y >= bottomGrid){
-
+        if (y >= (StartGridY + rows * cellWidth)-25){
 //            newPiecePosLength = x + (currentPieceLength * cellWidth);
+
             newPiecePosX = x;
-            newPiecePosY = y ;
-            bottomGrid = y - 25;
+            newPiecePosY = y;
             piecePlaced = true;
-//            System.out.println("new Piece x" + newPiecePosX);
-//            System.out.println("New piece y " + newPiecePosY);
-            y = 100;
+
+
+//            PiecePlacement(getGraphics());
+//            updateGrid();
+            y = StartGridY -25 ;
+            x = StartGridX;
+//            piecePlaced = false;
+
 
 
         }
