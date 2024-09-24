@@ -1,22 +1,24 @@
 package ui.Screens;
-import gameModel.Engine.NavigationEngine;
+import gameModel.Engine.*;
+import gameModel.Engine.Factory_Tetromino.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import gameModel.Engine.globalState;
+import java.util.Random;
 
 
-public class GameScreen extends JPanel implements ActionListener{
+public class GameScreen extends JPanel implements ActionListener {
 
     public Timer timer;
     public Boolean isPaused = false;
-    private int[] linePiece = {1,1,1,1};
-    private int cellWidth =25;
+    private int[] linePiece = {1, 1, 1, 1};
+    private int cellWidth = 25;
     private int cellHeight = 25;
     private int[][] grid;
     private final int rows = 15;
     private final int cols = 5;
-    private int[] currentPiece;
+    private int[][] currentPiece;
     private int currentPieceLength;
     private int newPiecePosX;
     private int newPiecePosY;
@@ -29,24 +31,25 @@ public class GameScreen extends JPanel implements ActionListener{
 //    private int screenHeight = (screenSize.height - getHeight()) / 2;
     private int screenWidth = 600;
     private int screenHeight = 900;
-    private int StartGridX = (screenWidth - (cols * cellWidth))/2;
-    private int StartGridY = (screenHeight - (rows * cellHeight))/2;
+    private int StartGridX = (screenWidth - (cols * cellWidth)) / 2;
+    private int StartGridY = (screenHeight - (rows * cellHeight)) / 2;
     private int x;
     private int y;
-
 
 
     public GameScreen() {
         System.out.println("gameScreen loaded");
         timer = new Timer(10, this);
         x = StartGridX;
-        y = StartGridY -25;
+        y = StartGridY - 25;
         grid = new int[rows][cols];
-        currentPiece = linePiece;
+
+        randomPieceGen();
+
         currentPieceLength = currentPiece.length;
 
         //Game Timer Start
-        if(globalState.getInstance().currentGameState){
+        if (globalState.getInstance().currentGameState) {
             timer.start();
         }
 
@@ -58,17 +61,17 @@ public class GameScreen extends JPanel implements ActionListener{
 
         //Pause Text Box
         JPanel pausePanel = new JPanel();
-        pausePanel.setSize(100,100);
+        pausePanel.setSize(100, 100);
         pausePanel.setBackground(Color.WHITE);
-        JLabel pauseLabel = new JLabel("Game Paused: Press \"P\" to unpause" );
-        pauseLabel.setSize(100,50);
+        JLabel pauseLabel = new JLabel("Game Paused: Press \"P\" to unpause");
+        pauseLabel.setSize(100, 50);
         pausePanel.add(pauseLabel);
         add(pausePanel);
         pausePanel.setVisible(false);
 
         InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
-        inputMap.put(KeyStroke.getKeyStroke("P"),"Pause");
+        inputMap.put(KeyStroke.getKeyStroke("P"), "Pause");
         inputMap.put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
         inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
         inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
@@ -76,11 +79,11 @@ public class GameScreen extends JPanel implements ActionListener{
         actionMap.put("Pause", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!isPaused){
+                if (!isPaused) {
                     isPaused = true;
                     pausePanel.setVisible(true);
                     timer.stop();
-                }else{
+                } else {
                     isPaused = false;
                     pausePanel.setVisible(false);
                     timer.start();
@@ -91,34 +94,33 @@ public class GameScreen extends JPanel implements ActionListener{
         actionMap.put("moveLeft", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!isPaused){
-                    x-= 25;
+                if (!isPaused) {
+                    x -= 25;
                     if (x < StartGridX)
                         x = StartGridX + (cols - currentPiece.length) * cellWidth;
                     repaint();
                 }
-                }
+            }
         });
 
         actionMap.put("moveRight", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!isPaused){
+                if (!isPaused) {
                     x += 25;
-                    if(x > StartGridX + (cols - currentPiece.length) * cellWidth){
+                    if (x > StartGridX + (cols - currentPiece.length) * cellWidth) {
                         x = StartGridX;
                     }
                     repaint();
                 }
-                }
+            }
         });
-
 
 
         //Back Button
         JButton backButton = new JButton("Back");
         add(backButton);
-        backButton.addActionListener(e ->{
+        backButton.addActionListener(e -> {
 
             timer.stop();
             pausePanel.setVisible(true);
@@ -131,13 +133,13 @@ public class GameScreen extends JPanel implements ActionListener{
 
             );
 
-            if(backOption == JOptionPane.YES_OPTION){
+            if (backOption == JOptionPane.YES_OPTION) {
                 NavigationEngine.bButtonFunc();
                 restartGame();
                 pausePanel.setVisible(false);
 
             }
-            if(backOption == JOptionPane.NO_OPTION){
+            if (backOption == JOptionPane.NO_OPTION) {
                 pausePanel.setVisible(false);
                 timer.start();
             }
@@ -147,20 +149,21 @@ public class GameScreen extends JPanel implements ActionListener{
     //Paint Grid & Pieces
     @Override
     public void paint(Graphics g) {
-    super.paint(g);
-    DrawGrid(g);
-    Piece(g);
+        super.paint(g);
+        DrawGrid(g);
+        Piece(g);
 //    PiecePlacement(g);
-    if(piecePlaced){
+        if (piecePlaced) {
 //        super.paint(g);
-        PiecePlacement(g);
+            PiecePlacement(g);
+
 //        piecePlaced = false;
-    }
+        }
     }
 
     public void restartGame() {
-        x =100;
-        y =0;
+        x = 100;
+        y = 0;
         timer.restart();
         timer.start();
         repaint();
@@ -171,43 +174,51 @@ public class GameScreen extends JPanel implements ActionListener{
     public void Piece(Graphics g) {
         g.setColor(Color.GREEN);
         for (int i = 0; i < currentPiece.length; i++) {
-            if (currentPiece[i] == 1) {
-                g.fillRect(x + i * 25, y, 25, 25);
+            for (int j = 0; j < currentPiece[i].length; j++) {
+                if (currentPiece[i][j] == 1) {
+                    g.fillRect(x + j * 25, y + i * 25, 25, 25);
+                }
+
             }
         }
     }
 
-    public void PiecePlacement(Graphics g){
+    public void PiecePlacement(Graphics g) {
         g.setColor(Color.PINK);
-        for(int i =0;i<currentPiece.length;i++){
-                g.fillRect(newPiecePosX + i * cellWidth, newPiecePosY, cellWidth,cellHeight);
+        for (int i = 0; i < currentPiece.length; i++) {
+            for (int j = 0; j < currentPiece[i].length; j++) {
 
-
+                g.fillRect(newPiecePosX + j * cellWidth, newPiecePosY + i * cellWidth, cellWidth, cellHeight);
+            }
         }
+
         updateGrid();
         lockPiece(g);
     }
 
-    public void updateGrid(){
+    public void updateGrid() {
         int gridX = newPiecePosX / cellWidth;
         int gridY = newPiecePosY / cellHeight;
 
         for (int i = 0; i < currentPiece.length; i++) {
-            if (currentPiece[i] == 1) {
+            for (int j = 0; j < currentPiece[i].length; j++) {
+                if (currentPiece[i][j] == 1) {
 
-                if (gridX + i < cols && gridY < rows) {
-                    grid[gridY][gridX + i] = 1;  // Mark the grid cell as filled
+                    if (gridX + j < cols && gridY + i < rows) {
+                        grid[gridY + i][gridX + j] = 1;  // Mark the grid cell as filled
+                    }
                 }
+
             }
         }
     }
 
-    public void lockPiece(Graphics g){
+    public void lockPiece(Graphics g) {
         g.setColor(Color.BLUE);
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (grid[i][j] == 1) {
-                    g.fillRect(StartGridX + j * cellWidth, StartGridY + i * cellWidth, cellWidth,cellHeight);
+                    g.fillRect(StartGridX + j * cellWidth, StartGridY + i * cellWidth, cellWidth, cellHeight);
 
                 }
             }
@@ -215,36 +226,78 @@ public class GameScreen extends JPanel implements ActionListener{
     }
 
 
-    public void DrawGrid(Graphics g){
+    public void DrawGrid(Graphics g) {
         g.setColor(Color.LIGHT_GRAY);
-        for(int i=0;i<rows;i++){
-            for(int j=0;j<cols;j++){
-                g.fillRect(StartGridX + j * cellWidth, StartGridY + i * cellWidth, cellWidth,cellHeight);
-                }
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                g.fillRect(StartGridX + j * cellWidth, StartGridY + i * cellWidth, cellWidth, cellHeight);
             }
         }
+    }
 
 
     public void actionPerformed(ActionEvent e) {
 
-        y +=1;
-        if (y >= (StartGridY + rows * cellWidth)-25){
+        y += 1;
+        if (y >= (StartGridY + rows * cellWidth) - 25) {
 //            newPiecePosLength = x + (currentPieceLength * cellWidth);
 
             newPiecePosX = x;
             newPiecePosY = y;
             piecePlaced = true;
-
+            randomPieceGen();
 
 //            PiecePlacement(getGraphics());
 //            updateGrid();
-            y = StartGridY -25 ;
+            y = StartGridY - 25;
             x = StartGridX;
 //            piecePlaced = false;
-
 
 
         }
         repaint();
     }
+
+    public void randomPieceGen() {
+
+
+        tetrominoFactory linePieceFactory = new linePieceFactory();
+        Tetromino_Gen linePiece = linePieceFactory.buildTetromino();
+
+        tetrominoFactory squarePieceFactory = new squarePieceFactory();
+        Tetromino_Gen squarePiece = squarePieceFactory.buildTetromino();
+
+        tetrominoFactory zPieceFactory = new zPieceFactory();
+        Tetromino_Gen zPiece = zPieceFactory.buildTetromino();
+
+        tetrominoFactory teePieceFactory = new teePieceFactory();
+        Tetromino_Gen teePiece = teePieceFactory.buildTetromino();
+
+        tetrominoFactory lPieceFactory = new lPieceFactory();
+        Tetromino_Gen lPiece = lPieceFactory.buildTetromino();
+
+
+
+        Random randNum = new Random();
+        int randomNumb = randNum.nextInt(6);
+
+        if (randomNumb == 1) {
+            currentPiece = linePiece.createTetromino();
+        }
+        else if (randomNumb == 2) {
+            currentPiece = zPiece.createTetromino();
+        }
+        else if (randomNumb == 3) {
+            currentPiece = teePiece.createTetromino();
+        }
+        else if (randomNumb == 4) {
+            currentPiece = lPiece.createTetromino();
+        }
+        else if (randomNumb == 5) {
+            currentPiece = squarePiece.createTetromino();
+        }
+    }
+
+
+
 }
