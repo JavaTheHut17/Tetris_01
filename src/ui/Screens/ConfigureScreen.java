@@ -4,9 +4,11 @@ import gameModel.Engine.NavigationEngine;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConfigureScreen extends   JPanel {
-
+public int cols;
+public int rows;
     public ConfigureScreen(){
 
         //Config
@@ -40,7 +42,7 @@ public class ConfigureScreen extends   JPanel {
         add(fieldWidthLabel, gbc);
 
         //Field Width Slider
-        JSlider fieldWidthSlider = new JSlider(JSlider.HORIZONTAL, 5, 15, 7);
+        JSlider fieldWidthSlider = new JSlider(JSlider.HORIZONTAL, 5, 15, 5);
         fieldWidthSlider.setMajorTickSpacing(1);
         fieldWidthSlider.setPaintTicks(true);
         fieldWidthSlider.setPaintLabels(true);
@@ -52,9 +54,13 @@ public class ConfigureScreen extends   JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
         add(fieldWidthSlider, gbc);
         //Value Extract FWS
-         JLabel fieldWidthValue = new JLabel("7");
+        AtomicInteger FWSValue = new AtomicInteger(fieldWidthSlider.getValue());
+        cols = FWSValue.get();
+        String colsStr = Integer.toString(cols);
+         JLabel fieldWidthValue = new JLabel(colsStr);
         fieldWidthSlider.addChangeListener(e -> {
-            int FWSValue = fieldWidthSlider.getValue();
+            FWSValue.set(fieldWidthSlider.getValue());
+            cols = FWSValue.get();
             fieldWidthValue.setText(""+FWSValue);
         });
         //Field Width Slider Value Text
@@ -79,7 +85,7 @@ public class ConfigureScreen extends   JPanel {
         add(fieldHeightLabel, gbc);
 
         //Field Height Slider
-        JSlider fieldHeightSlider = new JSlider(JSlider.HORIZONTAL, 15, 30, 20);
+        JSlider fieldHeightSlider = new JSlider(JSlider.HORIZONTAL, 15, 30, 15);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
@@ -90,11 +96,16 @@ public class ConfigureScreen extends   JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
         add(fieldHeightSlider, gbc);
         //Value Extract FHS
-        JLabel fieldHeightValue = new JLabel("20");
+         AtomicInteger FHSValue = new AtomicInteger(fieldHeightSlider.getValue());
+         rows = FHSValue.get();
+        String rowsStr = Integer.toString(rows);
+        JLabel fieldHeightValue = new JLabel(rowsStr);
         fieldHeightSlider.addChangeListener(e -> {
-            int FHSValue = fieldHeightSlider.getValue();
+            FHSValue.set(fieldHeightSlider.getValue());
+            rows = FHSValue.get();
             fieldHeightValue.setText(""+ FHSValue);
         });
+
         //Field Height Slider Value Text
         gbc.gridx = 4;
         gbc.gridy = 2;

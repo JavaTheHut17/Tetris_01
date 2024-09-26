@@ -42,7 +42,6 @@ public class TitleScreen extends JPanel {
             JButton playButton = new JButton("Play");
             add(playButton);
             playButton.addActionListener(e ->{
-
             globalState.getInstance().currentGameState = true;
             System.out.println("title screen : " + globalState.getInstance().currentGameState);
             NavigationEngine.playButtonNavFunc();
@@ -56,6 +55,7 @@ public class TitleScreen extends JPanel {
         configButton.addActionListener(e ->{
             NavigationEngine.ConfigNavFunc();
         });
+
 
         //High Score Button
         JButton highScoreButton = new JButton("High Score");

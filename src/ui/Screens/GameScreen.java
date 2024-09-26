@@ -16,19 +16,17 @@ public class GameScreen extends JPanel implements ActionListener {
     private int cellWidth = 25;
     private int cellHeight = 25;
     private int[][] grid;
-    private final int rows = 15;
-    private final int cols = 5;
+//    public final int rows = 15;
+    ConfigureScreen conFigScreen = new ConfigureScreen();
+    int cols = conFigScreen.cols;
+    int rows = conFigScreen.rows;
+
     private int[][] currentPiece;
     private int currentPieceLength;
     private int newPiecePosX;
     private int newPiecePosY;
     private Boolean piecePlaced = false;
-
-    //Screen Sizing (fix this )
-//    Toolkit toolkit = Toolkit.getDefaultToolkit();
-//    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//    private int screenWidth = (screenSize.width - getWidth()) / 2;
-//    private int screenHeight = (screenSize.height - getHeight()) / 2;
+    private int[][] oldPiece;
     private int screenWidth = 600;
     private int screenHeight = 900;
     private int StartGridX = (screenWidth - (cols * cellWidth)) / 2;
@@ -36,23 +34,26 @@ public class GameScreen extends JPanel implements ActionListener {
     private int x;
     private int y;
 
-
     public GameScreen() {
-        System.out.println("gameScreen loaded");
+
+
+        System.out.println("rows: " + rows);
         timer = new Timer(10, this);
+
         x = StartGridX;
         y = StartGridY - 25;
+
         grid = new int[rows][cols];
-
-        randomPieceGen();
-
+        currentPiece = new int[][]{linePiece};
         currentPieceLength = currentPiece.length;
 
         //Game Timer Start
         if (globalState.getInstance().currentGameState) {
+
             timer.start();
         }
 
+        //Window
         setFocusable(true);
         SwingUtilities.invokeLater(this::requestFocusInWindow);
         setPreferredSize(new Dimension(400, 600));
@@ -69,6 +70,7 @@ public class GameScreen extends JPanel implements ActionListener {
         add(pausePanel);
         pausePanel.setVisible(false);
 
+        //User Input
         InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
         inputMap.put(KeyStroke.getKeyStroke("P"), "Pause");
@@ -97,7 +99,7 @@ public class GameScreen extends JPanel implements ActionListener {
                 if (!isPaused) {
                     x -= 25;
                     if (x < StartGridX)
-                        x = StartGridX + (cols - currentPiece.length) * cellWidth;
+                        x = StartGridX;
                     repaint();
                 }
             }
@@ -108,8 +110,9 @@ public class GameScreen extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if (!isPaused) {
                     x += 25;
-                    if (x > StartGridX + (cols - currentPiece.length) * cellWidth) {
-                        x = StartGridX;
+                    int calc = StartGridX + (cols - currentPiece[0].length) * cellWidth;
+                    if (x > calc) {
+                        x =calc;
                     }
                     repaint();
                 }
@@ -121,7 +124,6 @@ public class GameScreen extends JPanel implements ActionListener {
         JButton backButton = new JButton("Back");
         add(backButton);
         backButton.addActionListener(e -> {
-
             timer.stop();
             pausePanel.setVisible(true);
             //Back Option Panel
@@ -146,18 +148,19 @@ public class GameScreen extends JPanel implements ActionListener {
         });
     }
 
+
+
+
     //Paint Grid & Pieces
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         DrawGrid(g);
         Piece(g);
-//    PiecePlacement(g);
         if (piecePlaced) {
-//        super.paint(g);
+
             PiecePlacement(g);
 
-//        piecePlaced = false;
         }
     }
 
@@ -185,26 +188,30 @@ public class GameScreen extends JPanel implements ActionListener {
 
     public void PiecePlacement(Graphics g) {
         g.setColor(Color.PINK);
-        for (int i = 0; i < currentPiece.length; i++) {
-            for (int j = 0; j < currentPiece[i].length; j++) {
+        for (int i = 0; i < oldPiece.length; i++) {
+            for (int j = 0; j < oldPiece[i].length; j++) {
+                if(oldPiece[i][j] == 1){
+                    int drawXP = StartGridX + (newPiecePosX - StartGridX) + j * cellWidth;
+                    int drawYP = StartGridY + (newPiecePosY - StartGridY) + i * cellHeight;
+                    g.fillRect(drawXP, drawYP, cellWidth, cellHeight);                }
 
-                g.fillRect(newPiecePosX + j * cellWidth, newPiecePosY + i * cellWidth, cellWidth, cellHeight);
             }
         }
 
         updateGrid();
         lockPiece(g);
+        piecePlaced = false;
     }
 
     public void updateGrid() {
-        int gridX = newPiecePosX / cellWidth;
-        int gridY = newPiecePosY / cellHeight;
+        int gridX = (newPiecePosX - StartGridX) / cellWidth;
+        int gridY = (newPiecePosY - StartGridY) / cellHeight;
 
-        for (int i = 0; i < currentPiece.length; i++) {
-            for (int j = 0; j < currentPiece[i].length; j++) {
-                if (currentPiece[i][j] == 1) {
+        for (int i = 0; i < oldPiece.length; i++) {
+            for (int j = 0; j < oldPiece[i].length; j++) {
+                if (oldPiece[i][j] == 1) {
 
-                    if (gridX + j < cols && gridY + i < rows) {
+                    if (gridX + j >= 0 && gridX + j < cols && gridY + i >= 0 && gridY + i < rows) {
                         grid[gridY + i][gridX + j] = 1;  // Mark the grid cell as filled
                     }
                 }
@@ -240,19 +247,15 @@ public class GameScreen extends JPanel implements ActionListener {
 
         y += 1;
         if (y >= (StartGridY + rows * cellWidth) - 25) {
-//            newPiecePosLength = x + (currentPieceLength * cellWidth);
-
+            oldPiece = currentPiece;
             newPiecePosX = x;
             newPiecePosY = y;
             piecePlaced = true;
-            randomPieceGen();
-
-//            PiecePlacement(getGraphics());
 //            updateGrid();
             y = StartGridY - 25;
             x = StartGridX;
-//            piecePlaced = false;
 
+            randomPieceGen();
 
         }
         repaint();
@@ -297,7 +300,6 @@ public class GameScreen extends JPanel implements ActionListener {
             currentPiece = squarePiece.createTetromino();
         }
     }
-
 
 
 }
