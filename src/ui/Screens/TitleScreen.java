@@ -1,27 +1,25 @@
 package ui.Screens;
 
+import gameModel.Engine.MusicPlayer;
 import gameModel.Engine.NavigationEngine;
 import gameModel.Engine.globalState;
 
-import javax.sound.midi.Sequencer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.TimerTask;
-import javax.swing.Timer;
-import ui.Screens.GameScreen;
 
-public class TitleScreen extends JPanel {
+public class TitleScreen extends JPanel{
 
     private static CardLayout cardLayout;
     public static JPanel cardPanel;
 
 
+
     public TitleScreen() {
 
 
-
+//        mp.run();
         //Config
         setVisible(true);
 
@@ -74,9 +72,27 @@ public class TitleScreen extends JPanel {
 
 
 
+//        InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
+//        ActionMap actionMap = getActionMap();
+//        inputMap.put(KeyStroke.getKeyStroke("m"), "Music");
+//
+//        actionMap.put("Music", new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(isMusicRunning){
+//                    mp.pause();
+//                    setIsMusicRunnning(false);
+//                }if(!isMusicRunning){
+//                    mp.run();
+//                    setIsMusicRunnning(true);
+//                }
+//            }
+//        });
+
 
 
     }
+
 
 
 

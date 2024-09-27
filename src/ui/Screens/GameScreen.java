@@ -34,10 +34,12 @@ public class GameScreen extends JPanel implements ActionListener {
     private int x;
     private int y;
 
+    private boolean isMusicRunning;
+
     public GameScreen() {
+//        MusicPlayer mp = new MusicPlayer("src/Assets/Sound/backgroundMusic.mp3");
 
-
-
+//        mp.run();
 
         System.out.println("rows: " + rows);
         timer = new Timer(10, this);
@@ -120,7 +122,21 @@ public class GameScreen extends JPanel implements ActionListener {
                 }
             }
         });
-
+//
+//        inputMap.put(KeyStroke.getKeyStroke("m"), "Music");
+//
+//        actionMap.put("Music", new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if(isMusicRunning){
+//                    mp.pause();
+//                    setIsMusicRunnning(false);
+//                }if(!isMusicRunning){
+//                    mp.run();
+//                    setIsMusicRunnning(true);
+//                }
+//            }
+//        });
 
         //Back Button
         JButton backButton = new JButton("Back");
@@ -302,6 +318,13 @@ public class GameScreen extends JPanel implements ActionListener {
             currentPiece = squarePiece.createTetromino();
         }
     }
+    public void setIsMusicRunnning(boolean isMusicRunning){
+        this.isMusicRunning = isMusicRunning;
+    }
+    public boolean getIsMusicRunning(){
+        return isMusicRunning;
+    }
+
 
 
 }

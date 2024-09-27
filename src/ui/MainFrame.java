@@ -1,6 +1,7 @@
 package ui;
 
 import JsonFiles.ConfigState;
+import gameModel.Engine.MusicPlayer;
 import gameModel.Engine.NavigationEngine;
 import ui.Screens.SplashScreen;
 
@@ -20,6 +21,10 @@ public class MainFrame extends JFrame {
         new NavigationEngine();
         add(NavigationEngine.cardPanel);
         NavigationEngine.init();
+
+
+
+
 
         //Title
         setTitle("Tetris");

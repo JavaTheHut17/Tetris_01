@@ -3,11 +3,14 @@ package ui.Screens;
 import JsonFiles.ConfigState;
 import JsonFiles.LoadState;
 import JsonFiles.SaveState;
+import gameModel.Engine.MusicPlayer;
 import gameModel.Engine.NavigationEngine;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.lang.Thread.sleep;
 
 public class ConfigureScreen extends   JPanel {
 
@@ -23,8 +26,10 @@ public class ConfigureScreen extends   JPanel {
 
     public ConfigureScreen() {
 
-//        LoadState loadState = new LoadState();
-
+////        LoadState loadState = new LoadState();
+        MusicPlayer mp = new MusicPlayer("src/Assets/Sound/backgroundMusic.mp3");
+//        Thread thread = new Thread(mp);
+//            mp.play();
         LoadState ls = LoadState.LoadFromFile("config.json");
 
         this.cols = ls.getCols();
@@ -35,8 +40,10 @@ public class ConfigureScreen extends   JPanel {
         this.extendedModeToggle = ls.getextendedModeToggle();
         this.aiPlayToggle = ls.getaiPlayToggle();
 
+        if(musicToggle){
+            mp.play();
+        }
 
-        System.out.println(cols + " " + rows + " " + gameLvl);
 
         //Config
         setVisible(true);
@@ -226,21 +233,27 @@ public class ConfigureScreen extends   JPanel {
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
+
         MusicCheckBox.addChangeListener(e -> {
             Boolean MusicCheckBoxValue = MusicCheckBox.isSelected();
             if (MusicCheckBoxValue) {
                 MusicToggleValue.setText("On");
                 setMusicToggle(true);
-            } else {
+
+
+            } if(!MusicCheckBoxValue) {
                 MusicToggleValue.setText("Off");
                 setMusicToggle(false);
+
+
+
             }
         });
         add(MusicToggleValue, gbc);
 
 
-        //Sound Effects Toggle Label
-        JLabel SoundEffectsToggleLabel = new JLabel("Sound Effects (On/Off): ");
+        //Assets.Sound Effects Toggle Label
+        JLabel SoundEffectsToggleLabel = new JLabel("Assets.Sound Effects (On/Off): ");
         gbc.gridy = 5;
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -249,7 +262,7 @@ public class ConfigureScreen extends   JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
         add(SoundEffectsToggleLabel, gbc);
 
-        //Sound Effects Check Box
+        //Assets.Sound Effects Check Box
         JCheckBox SoundEffectsCheckBox = new JCheckBox();
         SoundEffectsCheckBox.setSelected(soundEffectsToggle);
         gbc.gridx = 1;
@@ -265,7 +278,7 @@ public class ConfigureScreen extends   JPanel {
         } else {
             Son_off = "Off";
         }
-        //Sound Effects Check Box Value Text
+        //Assets.Sound Effects Check Box Value Text
         JLabel SoundEffectsToggleValue = new JLabel(Son_off);
         gbc.gridx = 4;
         gbc.gridy = 5;
@@ -401,6 +414,11 @@ public class ConfigureScreen extends   JPanel {
             configState.setextendedModeToggle(extendedModeToggle);
             SaveState SS = new SaveState();
             SS.saveState(configState);
+            if(musicToggle){
+                mp.play();
+            }if(!musicToggle){
+                mp.pause();
+            }
         });
 
 
