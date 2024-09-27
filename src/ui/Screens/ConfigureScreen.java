@@ -1,5 +1,8 @@
 package ui.Screens;
 
+import JsonFiles.ConfigState;
+import JsonFiles.LoadState;
+import JsonFiles.SaveState;
 import gameModel.Engine.NavigationEngine;
 
 import javax.swing.*;
@@ -7,9 +10,33 @@ import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ConfigureScreen extends   JPanel {
-public int cols;
-public int rows;
-    public ConfigureScreen(){
+
+
+    public int cols;
+    public int rows;
+    public int gameLvl;
+    public boolean musicToggle;
+    public boolean soundEffectsToggle;
+    public boolean aiPlayToggle;
+    public boolean extendedModeToggle;
+
+
+    public ConfigureScreen() {
+
+//        LoadState loadState = new LoadState();
+
+        LoadState ls = LoadState.LoadFromFile("config.json");
+
+        this.cols = ls.getCols();
+        this.rows = ls.getRows();
+        this.gameLvl = ls.getgameLvl();
+        this.musicToggle = ls.getMusicToggle();
+        this.soundEffectsToggle = ls.getSoundEffectsToggle();
+        this.extendedModeToggle = ls.getextendedModeToggle();
+        this.aiPlayToggle = ls.getaiPlayToggle();
+
+
+        System.out.println(cols + " " + rows + " " + gameLvl);
 
         //Config
         setVisible(true);
@@ -42,7 +69,7 @@ public int rows;
         add(fieldWidthLabel, gbc);
 
         //Field Width Slider
-        JSlider fieldWidthSlider = new JSlider(JSlider.HORIZONTAL, 5, 15, 5);
+        JSlider fieldWidthSlider = new JSlider(JSlider.HORIZONTAL, 5, 15, cols);
         fieldWidthSlider.setMajorTickSpacing(1);
         fieldWidthSlider.setPaintTicks(true);
         fieldWidthSlider.setPaintLabels(true);
@@ -57,11 +84,12 @@ public int rows;
         AtomicInteger FWSValue = new AtomicInteger(fieldWidthSlider.getValue());
         cols = FWSValue.get();
         String colsStr = Integer.toString(cols);
-         JLabel fieldWidthValue = new JLabel(colsStr);
+        JLabel fieldWidthValue = new JLabel(colsStr);
         fieldWidthSlider.addChangeListener(e -> {
             FWSValue.set(fieldWidthSlider.getValue());
             cols = FWSValue.get();
-            fieldWidthValue.setText(""+FWSValue);
+            setCols(cols);
+            fieldWidthValue.setText("" + FWSValue);
         });
         //Field Width Slider Value Text
         gbc.gridx = 4;
@@ -71,7 +99,6 @@ public int rows;
         gbc.gridheight = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(fieldWidthValue, gbc);
-
 
 
         //Field Height Text
@@ -85,7 +112,7 @@ public int rows;
         add(fieldHeightLabel, gbc);
 
         //Field Height Slider
-        JSlider fieldHeightSlider = new JSlider(JSlider.HORIZONTAL, 15, 30, 15);
+        JSlider fieldHeightSlider = new JSlider(JSlider.HORIZONTAL, 15, 30, rows);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
@@ -96,14 +123,15 @@ public int rows;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(fieldHeightSlider, gbc);
         //Value Extract FHS
-         AtomicInteger FHSValue = new AtomicInteger(fieldHeightSlider.getValue());
-         rows = FHSValue.get();
+        AtomicInteger FHSValue = new AtomicInteger(fieldHeightSlider.getValue());
+        rows = FHSValue.get();
         String rowsStr = Integer.toString(rows);
         JLabel fieldHeightValue = new JLabel(rowsStr);
         fieldHeightSlider.addChangeListener(e -> {
             FHSValue.set(fieldHeightSlider.getValue());
             rows = FHSValue.get();
-            fieldHeightValue.setText(""+ FHSValue);
+            setRows(rows);
+            fieldHeightValue.setText("" + FHSValue);
         });
 
         //Field Height Slider Value Text
@@ -119,7 +147,6 @@ public int rows;
         fieldHeightSlider.setPaintLabels(true);
 
 
-
         //Game Level Text
         JLabel gameLevelLabel = new JLabel("Game Level: ");
         gbc.gridx = 0;
@@ -131,7 +158,7 @@ public int rows;
         add(gameLevelLabel, gbc);
 
         //Game Level Slider
-        JSlider gameLevelSlider = new JSlider(JSlider.HORIZONTAL, 1, 10, 5);
+        JSlider gameLevelSlider = new JSlider(JSlider.HORIZONTAL, 1, 10, gameLvl);
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -142,10 +169,14 @@ public int rows;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(gameLevelSlider, gbc);
         //Value Extract GLV
-        JLabel gameLevelValue = new JLabel("5");
+        AtomicInteger GLVValue = new AtomicInteger(gameLevelSlider.getValue());
+        gameLvl = GLVValue.get();
+        String gameLvlStr = Integer.toString(gameLvl);
+        JLabel gameLevelValue = new JLabel(gameLvlStr);
         gameLevelSlider.addChangeListener(e -> {
             int GLValue = gameLevelSlider.getValue();
-            gameLevelValue.setText(""+GLValue);
+            setgameLvl(GLValue);
+            gameLevelValue.setText("" + GLValue);
         });
         //Game Level Value Text
         gbc.gridx = 4;
@@ -160,7 +191,6 @@ public int rows;
         gameLevelSlider.setPaintLabels(true);
 
 
-
         //Music Toggle Label
         JLabel MusicToggleLabel = new JLabel("Music (On/Off): ");
         gbc.gridy = 4;
@@ -173,7 +203,7 @@ public int rows;
 
         //Music Check Box
         JCheckBox MusicCheckBox = new JCheckBox();
-        MusicCheckBox.setSelected(true);
+        MusicCheckBox.setSelected(musicToggle);
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.fill = GridBagConstraints.BOTH;
@@ -183,20 +213,27 @@ public int rows;
         add(MusicCheckBox, gbc);
 
         //Music Check Box Value Text
-        JLabel MusicToggleValue = new JLabel("On");
+        String on_off;
+        if (musicToggle) {
+            on_off = "On";
+        } else {
+            on_off = "Off";
+        }
+        JLabel MusicToggleValue = new JLabel(on_off);
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
-        MusicCheckBox.addChangeListener(e ->{
+        MusicCheckBox.addChangeListener(e -> {
             Boolean MusicCheckBoxValue = MusicCheckBox.isSelected();
-            if(MusicCheckBoxValue){
+            if (MusicCheckBoxValue) {
                 MusicToggleValue.setText("On");
-            }
-            else{
+                setMusicToggle(true);
+            } else {
                 MusicToggleValue.setText("Off");
+                setMusicToggle(false);
             }
         });
         add(MusicToggleValue, gbc);
@@ -214,7 +251,7 @@ public int rows;
 
         //Sound Effects Check Box
         JCheckBox SoundEffectsCheckBox = new JCheckBox();
-        SoundEffectsCheckBox.setSelected(true);
+        SoundEffectsCheckBox.setSelected(soundEffectsToggle);
         gbc.gridx = 1;
         gbc.gridy = 5;
         gbc.fill = GridBagConstraints.BOTH;
@@ -222,26 +259,31 @@ public int rows;
         gbc.gridheight = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(SoundEffectsCheckBox, gbc);
-
+        String Son_off;
+        if (soundEffectsToggle) {
+            Son_off = "On";
+        } else {
+            Son_off = "Off";
+        }
         //Sound Effects Check Box Value Text
-        JLabel SoundEffectsToggleValue = new JLabel("On");
+        JLabel SoundEffectsToggleValue = new JLabel(Son_off);
         gbc.gridx = 4;
         gbc.gridy = 5;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
-        SoundEffectsCheckBox.addChangeListener(e ->{
+        SoundEffectsCheckBox.addChangeListener(e -> {
             Boolean SoundEffectsCheckBoxValue = SoundEffectsCheckBox.isSelected();
-            if(SoundEffectsCheckBoxValue){
+            if (SoundEffectsCheckBoxValue) {
                 SoundEffectsToggleValue.setText("On");
-            }
-            else{
+                setsoundEffectsToggle(true);
+            } else {
                 SoundEffectsToggleValue.setText("Off");
+                setsoundEffectsToggle(false);
             }
         });
         add(SoundEffectsToggleValue, gbc);
-
 
 
         //AI Play Toggle Label
@@ -253,10 +295,15 @@ public int rows;
         gbc.gridheight = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
         add(AIPlayToggleLabel, gbc);
-
+        String Aon_off;
+        if (aiPlayToggle) {
+            Aon_off = "On";
+        } else {
+            Aon_off = "Off";
+        }
         //AI Play Check Box
         JCheckBox AIPlayCheckBox = new JCheckBox();
-        AIPlayCheckBox.setSelected(false);
+        AIPlayCheckBox.setSelected(aiPlayToggle);
         gbc.gridx = 1;
         gbc.gridy = 6;
         gbc.fill = GridBagConstraints.BOTH;
@@ -266,26 +313,31 @@ public int rows;
         add(AIPlayCheckBox, gbc);
 
         //AI Play Check Box Value Text
-        JLabel AIPlayToggleValue = new JLabel("Off");
+        JLabel AIPlayToggleValue = new JLabel(Aon_off);
         gbc.gridx = 4;
         gbc.gridy = 6;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
-        AIPlayCheckBox.addChangeListener(e ->{
+        AIPlayCheckBox.addChangeListener(e -> {
             Boolean AIPlayCheckBoxValue = AIPlayCheckBox.isSelected();
-            if(AIPlayCheckBoxValue){
+            if (AIPlayCheckBoxValue) {
                 AIPlayToggleValue.setText("On");
-            }
-            else{
+                setaiPlayToggle(true);
+            } else {
                 AIPlayToggleValue.setText("Off");
+                setaiPlayToggle(false);
             }
         });
         add(AIPlayToggleValue, gbc);
 
-
-
+        String Eon_off;
+        if (extendedModeToggle) {
+            Eon_off = "On";
+        } else {
+            Eon_off = "Off";
+        }
         //Extended Mode Toggle Label
         JLabel ExtendedModeToggleLabel = new JLabel("Extended Mode (On/Off): ");
         gbc.gridy = 7;
@@ -298,7 +350,7 @@ public int rows;
 
         //Extended ModeCheck Box
         JCheckBox ExtendedModeCheckBox = new JCheckBox();
-        ExtendedModeCheckBox.setSelected(false);
+        ExtendedModeCheckBox.setSelected(extendedModeToggle);
         gbc.gridx = 1;
         gbc.gridy = 7;
         gbc.fill = GridBagConstraints.BOTH;
@@ -308,39 +360,109 @@ public int rows;
         add(ExtendedModeCheckBox, gbc);
 
         //AI Play Check Box Value Text
-        JLabel ExtendedModeToggleValue = new JLabel("Off");
+        JLabel ExtendedModeToggleValue = new JLabel(Eon_off);
         gbc.gridx = 4;
         gbc.gridy = 7;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
-        ExtendedModeCheckBox.addChangeListener(e ->{
+        ExtendedModeCheckBox.addChangeListener(e -> {
             Boolean ExtendedModeCheckBoxValue = ExtendedModeCheckBox.isSelected();
-            if(ExtendedModeCheckBoxValue){
+            if (ExtendedModeCheckBoxValue) {
                 ExtendedModeToggleValue.setText("On");
-            }
-            else{
+                setextendedModeToggle(true);
+
+            } else {
                 ExtendedModeToggleValue.setText("Off");
+                setextendedModeToggle(false);
+
             }
         });
         add(ExtendedModeToggleValue, gbc);
 
-
-        //Back Button
+        //Save Button
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 5;
         gbc.gridheight = 1;
 //        gbc.anchor = GridBagConstraints.CENTER;
+        JButton saveButton = new JButton("Save Configuration");
+        add(saveButton, gbc);
+        saveButton.addActionListener(e -> {
+            ConfigState configState = new ConfigState();
+            configState.setCols(cols);
+            configState.setRows(rows);
+            configState.setSoundEffectsToggle(soundEffectsToggle);
+            configState.setMusicToggle(musicToggle);
+            configState.setgameLvl(gameLvl);
+            configState.setaiPlayToggle(aiPlayToggle);
+            configState.setextendedModeToggle(extendedModeToggle);
+            SaveState SS = new SaveState();
+            SS.saveState(configState);
+        });
+
+
+        //Back Button
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 5;
+        gbc.gridheight = 1;
+//        gbc.anchor = GridBagConstraints.CENTER;
         JButton backButton = new JButton("Back");
         add(backButton, gbc);
-        backButton.addActionListener(e ->{
+        backButton.addActionListener(e -> {
             NavigationEngine.bButtonFunc();
         });
 
 
-
     }
+public int getCols(){
+        return cols;
 }
+public void setCols(int cols){
+        this.cols = cols;
+}
+public int getRows(){
+        return rows;
+}
+public void setRows(int rows){
+        this.rows = rows;
+}
+public int getgameLvl(){
+        return gameLvl;
+}
+public void setgameLvl(int gameLvl){
+        this.gameLvl = gameLvl;
+}
+
+public void setMusicToggle(boolean musicToggle) {
+        this.musicToggle = musicToggle;
+    }
+    public boolean getMusicToggle() {
+        return musicToggle;
+    }
+
+public boolean getSoundEffectsToggle(){
+        return soundEffectsToggle;
+}
+public void setsoundEffectsToggle(boolean soundEffectsToggle) {
+        this.soundEffectsToggle = soundEffectsToggle;
+}
+public boolean getextendedModeToggle() {
+        return extendedModeToggle;
+}
+public void setextendedModeToggle(boolean extendedModeToggle) {
+        this.extendedModeToggle = extendedModeToggle;
+}
+public boolean getaiPlayToggle(){
+        return aiPlayToggle;
+}
+public void setaiPlayToggle(boolean aiPlayToggle) {
+        this.aiPlayToggle = aiPlayToggle;
+}
+
+}
+

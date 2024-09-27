@@ -1,5 +1,6 @@
 package ui;
 
+import JsonFiles.ConfigState;
 import gameModel.Engine.NavigationEngine;
 import ui.Screens.SplashScreen;
 
@@ -27,6 +28,9 @@ public class MainFrame extends JFrame {
         //Conditions
         setVisible(true);
         centerWindow();
+
+
+
 
 
 

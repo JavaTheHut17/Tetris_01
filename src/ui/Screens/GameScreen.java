@@ -1,4 +1,5 @@
 package ui.Screens;
+import JsonFiles.LoadState;
 import gameModel.Engine.*;
 import gameModel.Engine.Factory_Tetromino.*;
 
@@ -9,32 +10,33 @@ import java.util.Random;
 
 
 public class GameScreen extends JPanel implements ActionListener {
-
+    LoadState ls = LoadState.LoadFromFile("config.json");
     public Timer timer;
     public Boolean isPaused = false;
     private int[] linePiece = {1, 1, 1, 1};
     private int cellWidth = 25;
     private int cellHeight = 25;
     private int[][] grid;
-//    public final int rows = 15;
-    ConfigureScreen conFigScreen = new ConfigureScreen();
-    int cols = conFigScreen.cols;
-    int rows = conFigScreen.rows;
-
+    public final int rows = ls.getRows();
+    public final int cols= ls.getCols();
+    public int gamelvl = ls.getgameLvl();
     private int[][] currentPiece;
     private int currentPieceLength;
     private int newPiecePosX;
     private int newPiecePosY;
     private Boolean piecePlaced = false;
     private int[][] oldPiece;
+
     private int screenWidth = 600;
     private int screenHeight = 900;
-    private int StartGridX = (screenWidth - (cols * cellWidth)) / 2;
-    private int StartGridY = (screenHeight - (rows * cellHeight)) / 2;
+    int StartGridX = (screenWidth - (cols * cellWidth)) / 2;
+    int StartGridY = (screenHeight - (rows * cellHeight)) / 2;
     private int x;
     private int y;
 
     public GameScreen() {
+
+
 
 
         System.out.println("rows: " + rows);
@@ -245,7 +247,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 
-        y += 1;
+        y += gamelvl;
         if (y >= (StartGridY + rows * cellWidth) - 25) {
             oldPiece = currentPiece;
             newPiecePosX = x;
