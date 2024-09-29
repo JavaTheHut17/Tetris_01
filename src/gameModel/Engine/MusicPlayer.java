@@ -51,7 +51,7 @@ public class MusicPlayer implements Runnable {
             if (player == null) {
                 init();
             }
-            player.play(pausedFrame, Integer.MAX_VALUE); ]
+            player.play(pausedFrame, Integer.MAX_VALUE);
         } catch (JavaLayerException e) {
             System.out.println("Error during playback");
             throw new RuntimeException(e);
