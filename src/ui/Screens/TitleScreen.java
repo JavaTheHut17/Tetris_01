@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 
 public class TitleScreen extends JPanel{
 
-    private static CardLayout cardLayout;
-    public static JPanel cardPanel;
+//    private static CardLayout cardLayout;
+//    public static JPanel cardPanel;
 
 
 

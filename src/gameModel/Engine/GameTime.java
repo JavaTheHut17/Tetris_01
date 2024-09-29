@@ -13,7 +13,7 @@ public class GameTime {
 
     public static GameTime getInstance() {
         if (instance == null) {
-            instance = new GameTime(); // Create the instance if it doesn't exist
+            instance = new GameTime();
         }
         return instance;
     }
